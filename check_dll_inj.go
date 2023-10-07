@@ -38,8 +38,18 @@ func main() {
 
     for {
         var bytesRead uintptr
-        ret := syscall.ReadProcessMemory(hProcess, addr, (*byte)(unsafe.Pointer(&mbi)), unsafe.Sizeof(mbi), &bytesRead)
-        if ret != nil || bytesRead == 0 {
+        ret, _, _ := syscall.Syscall6(
+            syscall.NewLazyDLL("kernel32.dll").NewProc("VirtualQueryEx").Addr(),
+            5,
+            uintptr(hProcess),
+            addr,
+            uintptr(unsafe.Pointer(&mbi)),
+            unsafe.Sizeof(mbi),
+            0,
+            0,
+        )
+
+        if ret == 0 {
             break
         }
 
