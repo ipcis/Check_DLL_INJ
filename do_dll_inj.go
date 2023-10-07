@@ -8,7 +8,7 @@ import (
 
 func main(){
     //just a random dll
-    dllPath := "C:\\Windows\\System32\\wevtapi.dll"
+    dllPath := "C:\\Windows\\SysWOW64\\wevtapi.dll"
     procID := 8124
     hProc, handleErr  := w32.OpenProcess(w32.PROCESS_ALL_ACCESS, false, uint32(procID))
     if handleErr != nil{
