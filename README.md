@@ -19,3 +19,5 @@ gcc -shared -o hello.dll hello.c -Wl,--out-implib,libhello.a
 
 ```
 C:\Program Files\Go\pkg\tool\windows_amd64\link.exe: running gcc failed: exec: "gcc": executable file not found in %PATH%
+
+set PATH=%PATH%;C:\Users\MWuser\Downloads\x86_64-13.2.0-release-posix-seh-msvcrt-rt_v11-rev0\mingw64\bin
