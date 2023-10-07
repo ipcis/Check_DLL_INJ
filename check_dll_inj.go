@@ -33,7 +33,7 @@ func main() {
     addr := uintptr(0)
 
     for {
-        ret, _, _ := syscall.VirtualQueryEx(hProcess, addr, &mbi, unsafe.Sizeof(mbi))
+        ret, _, _ := syscall.VirtualQueryEx(hProcess, addr, (*syscall.MemoryBasicInformation)(unsafe.Pointer(&mbi)), uint32(unsafe.Sizeof(mbi)))
         if ret == 0 {
             break
         }
@@ -42,6 +42,6 @@ func main() {
             fmt.Printf("Region Start: %#x, Size: %#x\n", mbi.BaseAddress, mbi.RegionSize)
         }
 
-        addr = uintptr(unsafe.Pointer(mbi.BaseAddress)) + mbi.RegionSize
+        addr += uintptr(mbi.RegionSize)
     }
 }
