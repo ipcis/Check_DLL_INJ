@@ -3,6 +3,7 @@ package main
 import (
     "fmt"
     "os"
+    "strconv"
     "syscall"
     "unsafe"
 )
@@ -18,8 +19,12 @@ func main() {
         os.Exit(1)
     }
 
-    pid := os.Args[1]
-    targetPID := /* Konvertieren Sie pid in eine numerische PID */
+    pidStr := os.Args[1]
+    targetPID, err := strconv.Atoi(pidStr)
+    if err != nil {
+        fmt.Println("Ungültige PID:", err)
+        os.Exit(1)
+    }
 
     hProcess, err := syscall.OpenProcess(PROCESS_QUERY_INFORMATION|PROCESS_VM_READ, false, uint32(targetPID))
     if err != nil {
