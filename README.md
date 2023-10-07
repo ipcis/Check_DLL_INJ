@@ -11,6 +11,7 @@ C:\Users\MWuser\go_projekt\Check_DLL_INJ>go build -o do_dll_inj.exe do_dll_inj.g
 
 compile dll
 ```
+CGO_ENABLED=1
 go -o simple_dll.dll -buildmode=c-shared simple_dll.go
 go build -o mydll.dll -buildmode=c-shared mydll.go
 ```
