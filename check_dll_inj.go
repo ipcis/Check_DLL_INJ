@@ -13,6 +13,16 @@ const (
     PROCESS_VM_READ           = 0x0010
 )
 
+type MEMORY_BASIC_INFORMATION struct {
+    BaseAddress       uintptr
+    AllocationBase    uintptr
+    AllocationProtect uint32
+    RegionSize        uintptr
+    State             uint32
+    Protect           uint32
+    Type              uint32
+}
+
 func main() {
     if len(os.Args) != 2 {
         fmt.Println("Usage: dll-inject-checker <process_pid>")
@@ -33,22 +43,16 @@ func main() {
     }
     defer syscall.CloseHandle(hProcess)
 
-    var mbi syscall.MemoryBasicInformation
+    var mbi MEMORY_BASIC_INFORMATION
     addr := uintptr(0)
 
     for {
-        var bytesRead uintptr
-        ret, _, _ := syscall.Syscall6(
-            syscall.NewLazyDLL("kernel32.dll").NewProc("VirtualQueryEx").Addr(),
-            5,
+        ret, _, _ := syscall.NewLazyDLL("kernel32.dll").NewProc("VirtualQueryEx").Call(
             uintptr(hProcess),
             addr,
             uintptr(unsafe.Pointer(&mbi)),
             unsafe.Sizeof(mbi),
-            0,
-            0,
         )
-
         if ret == 0 {
             break
         }
@@ -57,6 +61,6 @@ func main() {
             fmt.Printf("Region Start: %#x, Size: %#x\n", mbi.BaseAddress, mbi.RegionSize)
         }
 
-        addr += uintptr(mbi.RegionSize)
+        addr += mbi.RegionSize
     }
 }
