@@ -34,16 +34,20 @@ func main() {
     defer syscall.CloseHandle(hProcess)
 
     var mbi syscall.MemoryBasicInformation
-    var bytesRead uintptr
     addr := uintptr(0)
 
     for {
-        ret, _, _ := syscall.VirtualQueryEx(hProcess, addr, &mbi, uint32(unsafe.Sizeof(mbi)))
+        ret, _, _ := syscall.NewLazyDLL("kernel32.dll").NewProc("VirtualQueryEx").Call(
+            uintptr(hProcess),
+            addr,
+            uintptr(unsafe.Pointer(&mbi)),
+            unsafe.Sizeof(mbi),
+        )
         if ret == 0 {
             break
         }
 
-        if mbi.Type&syscall.MEM_IMAGE != 0 {
+        if mbi.Type == 0x10000 { // MEM_IMAGE
             fmt.Printf("Region Start: %#x, Size: %#x\n", mbi.BaseAddress, mbi.RegionSize)
         }
 
