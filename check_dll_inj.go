@@ -28,7 +28,7 @@ func main() {
     }
     defer syscall.CloseHandle(hProcess)
 
-    var mbi syscall.MEMORY_BASIC_INFORMATION
+    var mbi syscall.MemoryBasicInformation
     var bytesRead uintptr
     addr := uintptr(0)
 
@@ -42,6 +42,6 @@ func main() {
             fmt.Printf("Region Start: %#x, Size: %#x\n", mbi.BaseAddress, mbi.RegionSize)
         }
 
-        addr = uintptr(unsafe.Pointer(mbi.BaseAddress)) + uintptr(mbi.RegionSize)
+        addr = uintptr(unsafe.Pointer(mbi.BaseAddress)) + mbi.RegionSize
     }
 }
