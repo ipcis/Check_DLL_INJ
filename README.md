@@ -14,5 +14,8 @@ compile dll
 set CGO_ENABLED=1
 go -o simple_dll.dll -buildmode=c-shared simple_dll.go
 go build -o mydll.dll -buildmode=c-shared mydll.go
+
+gcc -shared -o hello.dll hello.c -Wl,--out-implib,libhello.a
+
 ```
 C:\Program Files\Go\pkg\tool\windows_amd64\link.exe: running gcc failed: exec: "gcc": executable file not found in %PATH%
