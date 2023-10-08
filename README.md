@@ -1,4 +1,6 @@
 # 
+mingw install
+https://github.com/niXman/mingw-builds-binaries/releases
 
 ```
 C:\Users\MWuser\go_projekt\Check_DLL_INJ>go build -o do_dll_inj.exe do_dll_inj.go
